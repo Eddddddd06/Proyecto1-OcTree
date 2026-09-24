@@ -1,1 +1,16 @@
 latex_informe.txt
+
+# Compilacion
+Octree/build/
+build/
+*.o
+*.out
+
+# VSCode (configuracion local)
+.vscode/
+
+# CMake
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+Makefile
