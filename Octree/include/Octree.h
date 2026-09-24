@@ -42,25 +42,24 @@ private:
     bool contiene(const OctreeNode* nodo ,const  Point3D& p  )const;
 
     // obtiene  en que cuadrando se va a ir el punto 
-    int obtenerOctante(const  OctreeNode* nodo, const Point3D& p)const;
+    int obtenerOctante(const  OctreeNode* nodo,const Point3D& p)const;
 
     //divide en 8  el cuadrante
     void subdividir( OctreeNode*  nodo);
 
     // insercion rescursiva el nodo cuadrante
-    bool insertar(OctreeNode* nodo, const Point3D& punto);
+    bool insertar(OctreeNode*  nodo,const Point3D& p) ;
 
     // busqueda revursiva de el nodo cuadrante 
-    bool buscar(const OctreeNode* nodo, const Point3D& punto) const;
+    bool buscar( const  OctreeNode* nodo,const Point3D& p ) const;
 
     // extr de los extras para liberar la memoria de los nodos cuadrantes
-    void liberar(OctreeNode* nodo);
+    void liberar(OctreeNode* nodo ) ;
 
 public:
 
     Octree(float mX , float mY,float mZ , float maX , float maY , float maZ , int cap) ; 
     ~Octree();   
-
 
     // para insertar un punto 
     bool insertar(const Point3D& p ) ;
