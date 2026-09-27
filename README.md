@@ -5,13 +5,6 @@
   Estructura de datos espacial en 3D implementada en C++ , con una app de visualización en raylib
 </p>
 
-<p align="center">
-  <img alt="lenguaje" src="https://img.shields.io/badge/C%2B%2B-17-00599C?style=flat-square&logo=cplusplus&logoColor=white">
-  <img alt="build" src="https://img.shields.io/badge/build-CMake%203.14%2B-064F8C?style=flat-square&logo=cmake&logoColor=white">
-  <img alt="graficos" src="https://img.shields.io/badge/gr%C3%A1ficos-raylib%205.5-white?style=flat-square">
-  <img alt="pruebas" src="https://img.shields.io/badge/pruebas-55%20pasando-brightgreen?style=flat-square">
-</p>
-
 ---
 
 ## Integrantes
@@ -20,6 +13,7 @@
 |---|---|
 | Osorio Panduro | Lógica e implementación del Octree en C++ |
 | Leonardo Sanchez | Visualización 3D con raylib (C++) |
+| Diego Antonio Rosario | Visualización 3D con raylib (C++) |
 
 ---
 
