@@ -4,10 +4,10 @@
 
 ## Integrantes
 
-| Nombre   | GitHub   | Rol                         |
-|----------|----------|-----------------------------|
-| Edddd06  | Edddd06  | Lógica e implementación C++ |
-| Leonardo | Leonardo | Animación en Manim (Python) |
+| Nombre           | GitHub         | Rol                         |
+|------------------|----------------|-----------------------------|
+| Osorio Panduro   | Edddd06        | Lógica e implementación C++ |
+| Leonardo Sanchez | Leonardo       | Animación en Manim (Python) |
 
 ## Descripción
 
@@ -49,11 +49,21 @@ Requisitos: Python 3.8+ y Manim Community Edition.
 ```bash
 pip install manim
 cd Animacion
-manim -pql octree_animacion.py OctreeAnimacion
+python3 -m manim -pql octree_animacion.py OctreeAnimacion
 ```
 
 - `-pql` = preview + quality low (rápido para probar).
-- Para calidad alta: `manim -pqh octree_animacion.py OctreeAnimacion`
+- Para calidad alta: `python3 -m manim -pqh octree_animacion.py OctreeAnimacion`
+
+## Operaciones animadas
+
+La animación muestra las tres operaciones principales del Octree, todas impulsadas por una simulación en Python que replica exactamente la lógica del C++:
+
+| Operación   | Descripción en la animación                                     |
+|-------------|----------------------------------------------------------------|
+| Inserción   | Se insertan puntos y se muestra la subdivisión automática en 8 |
+| Búsqueda    | Se busca un punto existente (✓) y uno inexistente (✗)          |
+| Recorrido   | Recorrido post-order (misma lógica que `liberar()`)            |
 
 ## Complejidad
 
@@ -61,21 +71,4 @@ manim -pql octree_animacion.py OctreeAnimacion
 |------------|----------------------|--------------------------------------------------------------|
 | Inserción  | O(log N)             | En cada nivel se baja a 1 de 8 hijos → profundidad ~log₈(N) |
 | Búsqueda   | O(log N)             | Misma razón: recorrido de raíz a hoja                        |
-
-## Historial de commits
-
-### Commits on Sep 26, 2026
-
-- **Render final del caso borde y limpieza de escena** — Leonardo committed today
-- **Agregando textos de complejidad O(log N) y cierre** — Leonardo committed today
-- **Ajustando tiempos de animación para no pasar de 2 min** — Leonardo committed today
-
-### Commits on Sep 25, 2026
-
-- **Configurando la escena 3D y portada en Manim** — Leonardo committed 1 day ago
-- **Dibujando el primer cubo partiendo en 8 subcubos** — Leonardo committed 1 day ago
-
-### Commits on Sep 23, 2026
-
-- **Agregando las ultimas funciones** — Edddd06 committed 3 days ago
-- **Primeras funciones añadidas al Octree.cpp** — Edddd06 committed 3 days ago
+| Recorrido  | O(N)                 | Se visita cada nodo una sola vez                             |
