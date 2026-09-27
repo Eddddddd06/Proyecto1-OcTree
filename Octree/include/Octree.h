@@ -6,6 +6,16 @@ using namespace std ;
 
 
 class Octree{
+public:
+    // info de solo lectura de un nodo , es lo que usa la parte grafica para dibujar
+    struct InfoNodo {
+        float  minX,minY,minZ ;
+        float  maxX,maxY,maxZ ;
+        vector<Point3D> puntos ;
+        bool esHoja ;
+        int profundidad ;
+    };
+
 private:
     struct OctreeNode { //Osea es la representacion de la caja o cuadrante 
         //  estas cordenadas son basicamnte la corrdenada de los limites de el cuadrante
@@ -36,6 +46,10 @@ private:
 
     OctreeNode* root ;  
 
+    // tope de subdivisiones . sin esto , dos puntos identicos (o casi) con capacidad
+    // llena harian que insertar() se subdividiera para siempre y reventara la pila
+    static const int PROFUNDIDAD_MAXIMA = 12 ;
+
     //  Funciones auxiliares
 
     // revisa si el punto esta dentro de un cuadrante  en especifico 
@@ -48,10 +62,16 @@ private:
     void subdividir( OctreeNode*  nodo);
 
     // insercion rescursiva el nodo cuadrante
-    bool insertar(OctreeNode*  nodo,const Point3D& p) ;
+    bool insertar(OctreeNode*  nodo,const Point3D& p , int profundidad) ;
 
-    // busqueda revursiva de el nodo cuadrante 
-    bool buscar( const  OctreeNode* nodo,const Point3D& p ) const;
+    // busqueda revursiva de el nodo cuadrante , el camino es opcional
+    bool buscar( const  OctreeNode* nodo,const Point3D& p , vector<InfoNodo>* camino , int profundidad ) const;
+
+    // copia los limites y los puntos de un nodo a la struct de solo lectura
+    InfoNodo infoDe(const OctreeNode* nodo , int profundidad) const;
+
+    // recorrido postorder recursivo que va llenando la salida
+    void recorrerPostorder(const OctreeNode* nodo , int profundidad , vector<InfoNodo>& salida) const;
 
     // extr de los extras para liberar la memoria de los nodos cuadrantes
     void liberar(OctreeNode* nodo ) ;
@@ -65,6 +85,12 @@ public:
     bool insertar(const Point3D& p ) ;
     //buscamos punto 
     bool buscar(const Point3D& p)  const;
+
+    // la misma busqueda pero guardando los nodos por los que va pasando
+    bool buscar(const Point3D& p , vector<InfoNodo>& camino)  const;
+
+    // recorrido postorder de solo lectura , el mismo orden que usa liberar
+    void recorrerPostorder(vector<InfoNodo>& salida) const;
 
 
 };

@@ -73,13 +73,16 @@ void Octree::subdividir( OctreeNode*  nodo){
 }
 
 // insercion recursiva en el nodo cuadrante
-bool Octree::insertar(OctreeNode*  nodo,const Point3D& p) {
+bool Octree::insertar(OctreeNode*  nodo,const Point3D& p , int profundidad) {
     if(!contiene(nodo,p)) {  
         return false; 
     }
 
     if(nodo->hijos[0]==nullptr ){
-        if( (int)nodo->puntos.size()< nodo->capacidad ){
+        // si todavia cabe , o si ya llegamos al tope de subdivisiones , se guarda aca.
+        // el tope importa porque puntos repetidos siempre caen en el mismo octante y
+        // subdividir no los separaria nunca
+        if( (int)nodo->puntos.size()< nodo->capacidad || profundidad >= PROFUNDIDAD_MAXIMA ){
             nodo->puntos.push_back(p); 
             return true;
 
@@ -91,16 +94,19 @@ bool Octree::insertar(OctreeNode*  nodo,const Point3D& p) {
     }
 
     int oct = obtenerOctante(nodo, p); 
-    return insertar(nodo->hijos[oct],p) ; 
+    return insertar(nodo->hijos[oct],p,profundidad+1) ; 
 
 }
 
 // busqueda recursiva en el nodo cuadrante
-bool Octree::buscar( const  OctreeNode* nodo,const Point3D& p ) const{
+bool Octree::buscar( const  OctreeNode* nodo,const Point3D& p , vector<InfoNodo>* camino , int profundidad ) const{
     if( !contiene(nodo,p) ){  // si nos da false es porque no debe estar en el cuadrante entonces salimos
         return false; 
     }
 
+    if(camino!=nullptr){ // solo si nos pidieron el camino lo vamos guardando
+        camino->push_back(infoDe(nodo,profundidad)); 
+    }
 
     //si es hoja revisamos los puntos guardados
     if( nodo->hijos[0]==nullptr ){
@@ -116,7 +122,7 @@ bool Octree::buscar( const  OctreeNode* nodo,const Point3D& p ) const{
     }
     // y seguimos buscando al hijo que corresponde
     int oct = obtenerOctante(nodo,p); 
-    return buscar( nodo->hijos[oct],p); 
+    return buscar( nodo->hijos[oct],p,camino,profundidad+1); 
 
 
 }
@@ -135,9 +141,47 @@ void Octree::liberar(OctreeNode* nodo ) {
 
 // funciones ya de el octree relaciondo a insercion depuntos y busqueda 
 bool Octree::insertar(const Point3D& p ) {
-    return insertar(root , p) ; 
+    return insertar(root , p , 0) ; 
 }
 
 bool Octree::buscar(const Point3D& p)  const{
-    return buscar(root , p) ; 
+    return buscar(root , p , nullptr , 0) ; 
+}
+
+// la misma busqueda pero devolviendo los nodos por los que paso
+bool Octree::buscar(const Point3D& p , vector<InfoNodo>& camino)  const{
+    return buscar(root , p , &camino , 0) ; 
+}
+
+
+// funciones de solo lectura para poder dibujar el arbol por fuera
+
+// copia los limites y los puntos de un nodo a la struct de solo lectura
+Octree::InfoNodo Octree::infoDe(const OctreeNode* nodo , int profundidad) const{
+    InfoNodo info ; 
+    info.minX = nodo->minX ; 
+    info.minY = nodo->minY ; 
+    info.minZ = nodo->minZ ; 
+    info.maxX = nodo->maxX ; 
+    info.maxY = nodo->maxY ; 
+    info.maxZ = nodo->maxZ ; 
+    info.puntos = nodo->puntos ; 
+    info.esHoja = (nodo->hijos[0]==nullptr) ; // si no tiene hijos es hoja
+    info.profundidad = profundidad ; 
+    return info ; 
+}
+
+// recorrido postorder , primero los 8 hijos y al final el padre (igual que liberar)
+void Octree::recorrerPostorder(const OctreeNode* nodo , int profundidad , vector<InfoNodo>& salida) const{
+    if(nodo==nullptr ){
+        return; 
+    }
+    for(int i = 0; i <8 ;i++ ) {
+        recorrerPostorder(nodo->hijos[i] , profundidad+1 , salida); 
+    }
+    salida.push_back(infoDe(nodo,profundidad)); 
+}
+
+void Octree::recorrerPostorder(vector<InfoNodo>& salida) const{
+    recorrerPostorder(root , 0 , salida) ; 
 }

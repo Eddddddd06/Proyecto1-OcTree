@@ -1,10 +1,17 @@
 latex_informe.txt
 
+# Notas de trabajo que no van al repo
+guion_video.txt
+
 # Compilacion
 Octree/build/
 build/
 *.o
 *.out
+
+# Binarios que deja el boton Run C/C++ File
+animacion/motor_grafico/octree_visual
+Octree/src/main_test
 
 # VSCode (configuracion local)
 .vscode/
@@ -17,6 +24,3 @@ Makefile
 
 # Python
 __pycache__/
-
-# Manim (videos generados)
-Animacion/media/
